@@ -1,12 +1,28 @@
+import logging
+import requests
 from celery import shared_task
-import time
 
-@shared_task
-def send_welcome_email_task(user_email):
-    time.sleep(3)  # Email service simulation
-    return f"Email sent to {user_email}"
+logger = logging.getLogger(__name__)
 
-@shared_task
-def generate_user_report_task(user_id):
-    time.sleep(10)  # Heavy data processing simulation
-    return f"Report generated for User ID: {user_id}"
+@shared_task(
+    bind=True,
+    max_retries=3,
+    default_retry_delay=5,
+    autoretry_for=(requests.RequestException, Exception),
+    retry_backoff=True,
+)
+def send_webhook_notification(self, target_url, payload):
+    """
+    Background task to send Webhooks with Automatic Retry Logic.
+    """
+    logger.info(f"Triggering webhook to {target_url} [Attempt {self.request.retries + 1}]")
+    
+    try:
+        response = requests.post(target_url, json=payload, timeout=10)
+        response.raise_for_status()
+        logger.info(f"Webhook delivered successfully to {target_url}")
+        return {"status": "SUCCESS", "status_code": response.status_code}
+        
+    except requests.RequestException as exc:
+        logger.error(f"Webhook delivery failed to {target_url}: {str(exc)}")
+        raise self.retry(exc=exc)
