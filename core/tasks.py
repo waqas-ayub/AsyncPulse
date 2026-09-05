@@ -1,6 +1,9 @@
 import logging
 import requests
 from celery import shared_task
+from django_celery_results.models import TaskResult
+from django.utils import timezone
+from datetime import timedelta
 
 logger = logging.getLogger(__name__)
 
@@ -31,3 +34,14 @@ def send_webhook_notification(self, target_url, payload):
     except requests.RequestException as exc:
         logger.error(f"Webhook delivery failed to {target_url}: {str(exc)}")
         raise self.retry(exc=exc)
+
+
+@shared_task
+def cleanup_old_task_results(days=7):
+    """
+    Periodic background task to remove task result logs older than `days`.
+    """
+    cutoff_date = timezone.now() - timedelta(days=days)
+    deleted_count, _ = TaskResult.objects.filter(date_done__lt=cutoff_date).delete()
+    logger.info(f"Automated Cleanup: Purged {deleted_count} expired task results older than {days} days.")
+    return {"purged_records": deleted_count}

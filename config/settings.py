@@ -50,6 +50,11 @@ INSTALLED_APPS = [
 
     # Local Apps
     'core',
+
+    # ... baki existing apps ...
+    
+    'django_celery_results',  # Check karein yeh added ho
+    
 ]
 
 MIDDLEWARE = [
