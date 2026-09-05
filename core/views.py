@@ -24,23 +24,32 @@ class TriggerWebhookView(APIView):
         if not target_url:
             return Response({"error": "target_url is required"}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Trigger Celery task
         task = send_webhook_notification.delay(target_url, payload)
 
         return Response({
             "message": "Webhook task queued successfully",
-            "task_id": task.id
+            "task_id": task.id,
+            "status_check_url": f"/api/task-status/{task.id}/"
         }, status=status.HTTP_202_ACCEPTED)
 
 
 class TaskStatusView(APIView):
     def get(self, request, task_id):
         task_result = AsyncResult(task_id)
-        return Response({
+        
+        response_data = {
             "task_id": task_id,
             "status": task_result.status,
-            "result": task_result.result if task_result.ready() else None
-        }, status=status.HTTP_200_OK)
+            "result": None,
+            "error": None
+        }
+
+        if task_result.state == 'SUCCESS':
+            response_data["result"] = task_result.result
+        elif task_result.state == 'FAILURE':
+            response_data["error"] = str(task_result.result)
+
+        return Response(response_data, status=status.HTTP_200_OK)
 
 
 class GenerateReportView(APIView):
