@@ -27,7 +27,30 @@ INSTALLED_APPS = [
     'core',
 ]
 
+AUTH_USER_MODEL = 'core.User'
+
+class LocalDevCorsMiddleware:
+    """Allow the Vite dashboard at localhost:5173 to call the Django API directly."""
+
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        if request.method == 'OPTIONS':
+            from django.http import HttpResponse
+
+            response = HttpResponse()
+        else:
+            response = self.get_response(request)
+
+        response['Access-Control-Allow-Origin'] = '*'
+        response['Access-Control-Allow-Methods'] = 'GET, POST, PUT, PATCH, DELETE, OPTIONS'
+        response['Access-Control-Allow-Headers'] = 'Content-Type, Authorization'
+        return response
+
+
 MIDDLEWARE = [
+    'config.settings.LocalDevCorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
