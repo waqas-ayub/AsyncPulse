@@ -11,7 +11,9 @@ import {
   Server,
 } from 'lucide-react';
 
-const API_BASE = 'http://127.0.0.1:8000/api';
+const API_BASE = import.meta.env.VITE_API_URL 
+  ? `${import.meta.env.VITE_API_URL}/api`
+  : 'http://127.0.0.1:8000/api';
 const DEFAULT_PAYLOAD = `{
   "event": "user_signup",
   "user_id": 101
