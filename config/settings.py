@@ -50,9 +50,9 @@ class LocalDevCorsMiddleware:
 
 
 MIDDLEWARE = [
-    'config.settings.LocalDevCorsMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -63,6 +63,18 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'config.urls'
 
+# CORS & CSRF Settings for Production
+CORS_ALLOWED_ORIGINS = [
+    "https://async-pulse.vercel.app",
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://async-pulse.vercel.app",
+    "https://asyncpulse-production.up.railway.app",
+]
+
+CORS_ALLOW_HEADERS = ["*"]
+CORS_ALLOW_METHODS = ["GET", "POST", "OPTIONS", "DELETE", "PUT"]
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
