@@ -22,7 +22,7 @@ Real-time polling stream showcasing active task execution (`STATUS: 200 SUCCESS`
 
 ![AsyncPulse Task Execution Stream](https://raw.githubusercontent.com/waqas-ayub/AsyncPulse/main/assets/task-success.png)
 
-> **Note:** To ensure images display properly, create an `assets` folder in your repository root and upload your screenshots named `dashboard-idle.png` and `task-success.png`.
+
 
 ---
 
