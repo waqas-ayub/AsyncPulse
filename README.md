@@ -22,28 +22,39 @@ Real-time polling stream showcasing active task execution (`STATUS: 200 SUCCESS`
 
 ![AsyncPulse Task Execution Stream](https://raw.githubusercontent.com/waqas-ayub/AsyncPulse/main/assets/task-success.png)
 
+---
 
+## ☁️ Cloud Infrastructure & Deployment Topology
+
+AsyncPulse is deployed using a decoupled microservices pattern on Railway to guarantee high availability and fault isolation in production.
+
+![Railway Cloud Architecture](assets/architecture-deployment.png)
+
+- **Django Web Node (`AsyncPulse`):** Serves incoming REST API endpoints, handles request validation, and pushes asynchronous jobs to the message broker.
+- **Redis Message Broker:** Acts as the high-throughput in-memory queue manager, buffering background jobs and task payloads.
+- **Celery Background Workers:** Independent execution workers that consume jobs from Redis, execute background processes, handle exponential retries, and store execution results.
 
 ---
 
 ## 🚀 Key Features
 
-* **Asynchronous Webhook Engine:** Automated external webhooks delivery pipeline powered by Celery with exponential backoff retries.
-* **Task Throttling & Rate Limiting:** Strictly enforces per-task execution limits (e.g., 10 tasks/minute) to prevent server exhaustion and downstream API rate limits.
-* **Task Status Tracking:** Live background task status polling (`PENDING`, `STARTED`, `SUCCESS`, `FAILURE`) using `AsyncResult` integration.
-* **System Observability & Diagnostics:** Health check API (`/api/health/`) inspecting DB & Redis connection health in real-time.
-* **Automated Cleanups:** Scheduled daily purging of old task execution records via **Celery Beat** to keep the database lightweight and optimized.
+- **Asynchronous Webhook Engine:** Automated external webhooks delivery pipeline powered by Celery with exponential backoff retries.
+- **Task Throttling & Rate Limiting:** Strictly enforces per-task execution limits (e.g., 10 tasks/minute) to prevent server exhaustion and downstream API rate limits.
+- **Task Status Tracking:** Live background task status polling (`PENDING`, `STARTED`, `SUCCESS`, `FAILURE`) using `AsyncResult` integration.
+- **System Observability & Diagnostics:** Health check API (`/api/health/`) inspecting DB & Redis connection health in real-time.
+- **Automated Cleanups:** Scheduled daily purging of old task execution records via **Celery Beat** to keep the database lightweight and optimized.
 
 ---
 
 ## 🛠 Tech Stack & Architecture
 
-* **Backend Framework:** Django 5.x & Django REST Framework (DRF)
-* **Task Queue:** Celery 5.x
-* **Message Broker:** Redis
-* **Result Backend:** `django-celery-results` (Database Backend)
-* **Authentication:** JWT (SimpleJWT)
-* **Frontend UI:** React.js / Vite Operational Dashboard (Deployed on Vercel)
+- **Backend Framework:** Django 5.x & Django REST Framework (DRF)
+- **Task Queue:** Celery 5.x
+- **Message Broker:** Redis
+- **Result Backend:** `django-celery-results` (Database Backend)
+- **Authentication:** JWT (SimpleJWT)
+- **Frontend UI:** React.js / Vite Operational Dashboard (Deployed on Vercel)
+- **Deployment & Cloud Hosting:** Railway (Django Web Service, Celery Worker, Redis)
 
 ---
 
@@ -59,4 +70,4 @@ python -m venv venv
 
 # Activate virtual environment
 .\venv\Scripts\Activate.ps1   # Windows PowerShell
-# source venv/bin/activate    # Linux/macOS
+# source venv/bin/activate     # Linux/macOS
