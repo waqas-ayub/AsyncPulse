@@ -15,13 +15,12 @@
 ### 1. Webhook Dispatcher & Health Monitor Interface
 Interactive control center displaying real-time system health checks (Database & Redis connection status) alongside the webhook task dispatcher:
 
-![AsyncPulse Dashboard Idle State](<img width="959" height="479" alt="Screenshot 2026-10-03 111349" src="https://github.com/user-attachments/assets/26da8f29-f6c3-4f1f-9e21-54937241da1c" />
-)
+![AsyncPulse Dashboard Idle State](https://raw.githubusercontent.com/waqas-ayub/AsyncPulse/main/assets/dashboard-idle.png)
 
 ### 2. Live Task Stream & Asynchronous Worker Execution
 Real-time polling stream showcasing active task execution (`STATUS: 200 SUCCESS`), unique task tracking UUIDs, and live JSON payload responses processed by Celery workers:
 
-![AsyncPulse Task Execution Stream](<img width="958" height="479" alt="Screenshot 2026-10-03 111501" src="https://github.com/user-attachments/assets/361749a2-a01b-46c5-b4d3-16d88b28f8bf" />)
+![AsyncPulse Task Execution Stream](https://raw.githubusercontent.com/waqas-ayub/AsyncPulse/main/assets/task-success.png)
 
 > **Note:** To ensure images display properly, create an `assets` folder in your repository root and upload your screenshots named `dashboard-idle.png` and `task-success.png`.
 
